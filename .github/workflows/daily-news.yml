@@ -1,0 +1,22 @@
+name: Daily News Digest
+
+on:
+  schedule:
+    - cron: '0 7 * * *'  # 7 AM UTC daily
+  workflow_dispatch:
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests feedparser
+      - name: Run news digest
+        run: python scripts/news_digest.py
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'Update daily news digest'
