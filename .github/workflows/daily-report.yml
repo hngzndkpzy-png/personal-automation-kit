@@ -1,0 +1,25 @@
+name: Daily Activity Report
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Runs daily at 8 AM UTC
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate Report
+        run: |
+          echo "# Daily GitHub Activity Report" > REPORT.md
+          echo "Date: $(date)" >> REPORT.md
+          echo "Repo: ${{ github.repository }}" >> REPORT.md
+          echo "This is a starter daily report." >> REPORT.md
+
+      - name: Commit Report
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update daily report
+          file_pattern: REPORT.md
